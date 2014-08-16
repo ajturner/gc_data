@@ -29,7 +29,8 @@ Dir.glob('*.geojson').each do |file|
   client.index  index: 'datasets', type: 'dataset', id: json["id"], body: json
   features.each_with_index do |feature,i|
     begin
-      client.index  index: 'features', type: 'feature', id: [json["id"],i].join(':'), body: {properties: feature['properties'].to_s, geometry: feature['geometry']}
+      id = [json["id"],i].join(':')
+      client.index  index: 'features', type: 'feature', id: id, body: {id: id, properties: feature['properties'].to_json, geometry: feature['geometry']}
     rescue Exception => e
       puts "Failed on #{i}"
       next
